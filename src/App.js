@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import TodoForm from "./todo/TodoForm";
+import { TodoList } from "./todo/TodoList";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks");
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
+
+    const addTask = (taskName) => {
+        if (!taskName.trim()) return;
+        setTasks([...tasks, { id: Date.now(), name: taskName }]);
+    };
+
+    const deleteTask = (id) => {
+        setTasks(tasks.filter((task) => task.id !== id));
+    };
+
+    return (
+        <div className="app-container">
+            <h1 className="title">🌟 Task Manager 🌟</h1>
+            <TodoForm onAddTask={addTask} />
+            <TodoList tasks={tasks} onDeleteTask={deleteTask} />
+        </div>
+    );
+};
 
 export default App;
