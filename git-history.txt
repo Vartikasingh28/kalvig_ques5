@@ -1,0 +1,2 @@
+* 1cab6e6 Initial commit - React To-Do List App
+* 13d8011 Initialize project using Create React App
